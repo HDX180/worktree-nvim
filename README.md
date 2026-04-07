@@ -11,7 +11,7 @@ A guided two-step flow in a single Telescope window:
 1. **Step 1** — Select a base branch (with fuzzy search)
 2. **Step 2** — Type the worktree name, press Enter
 
-The worktree is created at `{base_path}/{project_name}_{worktree_name}`, and the result (success/failure) is displayed in the same Telescope window.
+The worktree is created at `{base_path}/{project_name}_{worktree_name}`. By default it will **automatically switch** to the new worktree after creation (configurable via `switch_after_create`).
 
 ### Switch Worktree
 
@@ -52,7 +52,8 @@ The current worktree is marked with `*` in the list, and the cursor defaults to 
 
 ```lua
 require("worktree").setup({
-  base_path = "~/.worktrees",  -- where worktrees are stored
+  base_path = "~/.worktrees",       -- where worktrees are stored (default: "~/.worktrees")
+  switch_after_create = true,        -- auto-switch to new worktree after creation (default: true)
 })
 ```
 
@@ -78,6 +79,13 @@ local worktree = require("worktree")
 worktree.create()  -- open the create worktree flow
 worktree.switch()  -- open the switch worktree picker
 ```
+
+## Configuration
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `base_path` | `string` | `"~/.worktrees"` | Directory where worktrees are stored |
+| `switch_after_create` | `boolean` | `true` | Automatically switch to the new worktree after creation |
 
 ## Worktree path convention
 

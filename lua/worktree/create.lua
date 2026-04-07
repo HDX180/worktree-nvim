@@ -108,8 +108,14 @@ function M.run()
           actions.close(prompt_bufnr)
 
           if result.ok then
-            -- Auto-switch to the newly created worktree
-            require("worktree.switch")._switch_to(result.path, name)
+            if wt_config.switch_after_create then
+              require("worktree.switch")._switch_to(result.path, name)
+            else
+              vim.notify(
+                string.format("Worktree created: %s\nPath: %s", name, result.path),
+                vim.log.levels.INFO
+              )
+            end
           else
             vim.notify(table.concat(result.lines, "\n"), vim.log.levels.ERROR)
           end

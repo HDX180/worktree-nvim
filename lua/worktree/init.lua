@@ -2,6 +2,7 @@ local M = {}
 
 M.config = {
   base_path = "~/.worktrees",
+  switch_after_create = true,
 }
 
 --- Setup the worktree plugin with user options.
