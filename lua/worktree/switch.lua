@@ -30,11 +30,10 @@ function M.run()
   for _, wt in ipairs(worktrees) do
     if not wt.bare then
       local branch_label = wt.branch or (wt.detached and "detached" or "unknown")
-      local is_current = vim.startswith(current_dir, wt.path) or vim.startswith(wt.path, current_dir)
-      -- Also compare resolved paths to handle symlinks
-      if not is_current then
-        is_current = vim.fn.resolve(current_dir) == vim.fn.resolve(wt.path)
-      end
+      -- Exact path match only (resolve to handle symlinks/trailing slashes)
+      local resolved_cwd = vim.fn.resolve(current_dir):gsub("/$", "")
+      local resolved_wt = vim.fn.resolve(wt.path):gsub("/$", "")
+      local is_current = resolved_cwd == resolved_wt
       local marker = is_current and " * " or "   "
       local display = string.format("%s[%s] %s", marker, branch_label, wt.path)
       table.insert(entries, {
