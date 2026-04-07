@@ -18,6 +18,12 @@ function M.run()
   local actions = require("telescope.actions")
   local action_state = require("telescope.actions.state")
   local previewers = require("telescope.previewers")
+  local Sorter = require("telescope.sorters")
+
+  -- A no-op sorter that always shows all entries (used in step 2 & 3)
+  local empty_sorter = Sorter.new({
+    scoring_function = function() return 0 end,
+  })
 
   local branches = utils.get_branches()
   if #branches == 0 then
@@ -69,6 +75,8 @@ function M.run()
           state.step = 2
 
           local current_picker = action_state.get_current_picker(prompt_bufnr)
+          -- Disable filtering so prompt input is treated as worktree name, not search
+          current_picker.sorter = empty_sorter
           current_picker:refresh(
             finders.new_table({
               results = {
@@ -87,6 +95,7 @@ function M.run()
 
           if name == "" then
             -- Refresh with a hint instead of vim.notify
+            current_picker.sorter = empty_sorter
             current_picker:refresh(
               finders.new_table({ results = { "⚠ Worktree name cannot be empty" } }),
               { reset_prompt = true }
@@ -98,6 +107,7 @@ function M.run()
           local result_lines = M._create_worktree(state.base_branch, name, project_name)
           state.step = 3
 
+          current_picker.sorter = empty_sorter
           current_picker:refresh(
             finders.new_table({ results = result_lines }),
             { reset_prompt = true }
