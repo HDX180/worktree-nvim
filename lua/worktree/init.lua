@@ -15,14 +15,19 @@ function M.setup(opts)
   vim.fn.mkdir(M.config.base_path, "p")
 end
 
+--- Open the unified worktree manager panel (list / switch / create / delete).
+function M.manage()
+  require("worktree.manage").run()
+end
+
 --- Create a new worktree (opens Telescope branch picker).
 function M.create()
   require("worktree.create").run()
 end
 
---- Switch to another worktree (opens Telescope worktree picker).
+--- Switch to another worktree. Now handled by the manager panel.
 function M.switch()
-  require("worktree.switch").run()
+  require("worktree.manage").run()
 end
 
 return M

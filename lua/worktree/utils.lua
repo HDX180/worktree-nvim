@@ -108,6 +108,15 @@ function M.get_worktrees()
   if current.path then
     table.insert(worktrees, current)
   end
+
+  -- Mark the main worktree: git always lists it first (the non-linked one).
+  for _, wt in ipairs(worktrees) do
+    if not wt.bare then
+      wt.is_main = true
+      break
+    end
+  end
+
   return worktrees
 end
 
